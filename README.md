@@ -2,14 +2,20 @@
 A library handling both password hashing and JWT management
 
 ## Installation
-In order to use this library, you need to add a reference to the `CredGuard.dll` in your project. You can do this by adding the following XML snippet to your project file:
-```xml
-<ItemGroup>
-    <Reference Include="CredGuard">
-        <HintPath>.\dlls\CredGuard.dll</HintPath>
-    </Reference>
-</ItemGroup>
-```
+1. Clone the repository or download the source code.
+    ```bash
+    git clone git@github.com:Felix-Omondi/CredGuard.git
+    ```
+2. Build the project to generate the `CredGuard.dll` file.
+3. Copy the generated `.dll` file to your project.
+4. Add a reference to the `CredGuard.dll` in your project.
+    ```xml
+    <ItemGroup>
+        <Reference Include="CredGuard">
+            <HintPath>.\dlls\CredGuard.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+    ```
 
 ## Usage
 ### Password Hashing
