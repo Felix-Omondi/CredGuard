@@ -12,6 +12,9 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddCredGuard(this IServiceCollection services, IConfiguration configuration)
     {
+        var jwtKey = configuration["JwtSettings:Key"]
+            ?? throw new InvalidOperationException("JWT key is not configured in JwtSettings:Key.");
+
         services.AddScoped<TokenService>();
 
         services.AddOpenApi(options =>
@@ -36,7 +39,7 @@ public static class ServiceCollectionExtensions
                 ValidateIssuerSigningKey = true,
                 ValidIssuer = configuration["JwtSettings:Issuer"],
                 ValidAudience = configuration["JwtSettings:Audience"],
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSettings:Key"])),
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)),
                 ClockSkew = TimeSpan.Zero,
                 NameClaimType = JwtRegisteredClaimNames.Name,
 

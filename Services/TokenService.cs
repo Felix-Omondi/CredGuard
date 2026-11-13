@@ -18,7 +18,9 @@ public class TokenService
 
     public string GenerateToken(string name, string email, string role)
     {
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSettings:Key"]));
+        var jwtKey = _configuration["JwtSettings:Key"] ?? throw new InvalidOperationException("JwtSettings:Key is missing from configuration.");
+        byte[] keyBytes = Encoding.UTF8.GetBytes(jwtKey);
+        var key = new SymmetricSecurityKey(keyBytes);
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var claims = new List<Claim>
@@ -31,7 +33,7 @@ public class TokenService
         var descriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(claims),
-            Expires = DateTime.UtcNow.AddHours(Convert.ToInt32(_configuration["JwtSettings:ExpiryHours"])),
+            Expires = DateTime.UtcNow.AddHours(Convert.ToDouble(_configuration["JwtSettings:ExpiryHours"] ?? "0.5")),
             Issuer = _configuration["JwtSettings:Issuer"],
             Audience = _configuration["JwtSettings:Audience"],
             SigningCredentials = credentials,
