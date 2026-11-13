@@ -7,15 +7,30 @@ using System.Security.Claims;
 
 namespace CredGuard.Services;
 
+/// <summary>
+/// Provides services for generating JSON Web Tokens (JWT) for authentication and authorization.
+/// </summary>
 public class TokenService
 {
     private readonly IConfiguration _configuration;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="TokenService"/> class with the specified configuration.
+    /// </summary>
+    /// <param name="configuration">The IConfiguration instance.</param>
     public TokenService(IConfiguration configuration)
     {
         _configuration = configuration;
     }
 
+    /// <summary>
+    /// Generates a JSON Web Token (JWT) for the specified user information.
+    /// </summary>
+    /// <param name="name">The name of the user.</param>
+    /// <param name="email">The email of the user.</param>
+    /// <param name="role">The role of the user.</param>
+    /// <returns>The generated JWT.</returns>
+    /// <exception cref="InvalidOperationException">Thrown when required JWT settings are missing from configuration.</exception>
     public string GenerateToken(string name, string email, string role)
     {
         var jwtKey = _configuration["JwtSettings:Key"] ?? throw new InvalidOperationException("JwtSettings:Key is missing from configuration.");

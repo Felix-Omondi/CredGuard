@@ -4,11 +4,17 @@
         <TargetFramework>net11.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="BCrypt.Net-Next" Version="4.2.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="11.0.0" />
-        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="11.0.0" />
-        <PackageReference Include="Microsoft.Extensions.Configuration" Version="11.0.0" />
+        <PackageReference Include="BCrypt.Net-Next"
+                          Version="4.2.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer"
+                          Version="11.0.0" />
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi"
+                          Version="11.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Configuration"
+                          Version="11.0.0" />
     </ItemGroup>
 </Project>
