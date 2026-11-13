@@ -7,6 +7,10 @@ A library handling both password hashing and JWT management
     git clone git@github.com:Felix-Omondi/CredGuard.git
     ```
 2. Build the project to generate the `CredGuard.dll` file.
+    ```bash
+    cd CredGuard
+    dotnet build
+    ```
 3. Copy the generated `.dll` file to your project.
 4. Add a reference to the `CredGuard.dll` in your project.
     ```xml
