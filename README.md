@@ -1,41 +1,50 @@
 # CredGuard
+
 A library handling both password hashing and JWT management
 
 ## Installation
+
 1. Clone the repository or download the source code.
-    ```bash
-    git clone git@github.com:Felix-Omondi/CredGuard.git
-    ```
+   ```bash
+   git clone git@github.com:Felix-Omondi/CredGuard.git
+   ```
 2. Build the project to generate the `CredGuard.dll` file.
-    ```bash
-    cd CredGuard
-    dotnet build
-    ```
+   ```bash
+   cd CredGuard
+   dotnet build
+   ```
 3. Copy the generated `.dll` file to your project.
 4. Add a reference to the `CredGuard.dll` in your project.
-    ```xml
-    <ItemGroup>
-        <Reference Include="CredGuard">
-            <HintPath>.\dlls\CredGuard.dll</HintPath>
-        </Reference>
-    </ItemGroup>
-    ```
+   ```xml
+   <ItemGroup>
+       <Reference Include="CredGuard">
+           <HintPath>.\dlls\CredGuard.dll</HintPath>
+       </Reference>
+   </ItemGroup>
+   ```
 
 ## Usage
+
 ### Password Hashing
+
 To hash a password, you can use the `HashingService` class:
+
 ```csharp
 HashingService.HashPassword("myPassword");
 ```
 
 ### Password Verification
+
 To verify a password against a hashed password, you can use the `HashingService` class:
+
 ```csharp
 HashingService.VerifyPassword("myPassword", "hashedPassword");
 ```
 
 ### JWT Management
+
 To generate a JWT token, you can use the `TokenService` class:
+
 ```csharp
 var tokenService = new TokenService(configuration);
 var token = tokenService.GenerateToken("John Doe", "john.doe@example.com", "User");
@@ -48,11 +57,13 @@ var authResponse = new AuthResponse
 // In this example, the JWT token is returned in the `AuthResponse` object, which contains a message and the generated token.
 ```
 
-In order to use the `TokenService`, you need to provide a configuration object that contains the JWT settings. 
+In order to use the `TokenService`, you need to provide a configuration object that contains the JWT settings.
+
 ```json
 {
   "JwtSettings": {
-    "Key": "your-secret-key",
+    "TokenSecret": "your-secret-key",
+    "RefreshTokenSecret": "your-secret-key",
     "Issuer": "your-issuer",
     "Audience": "your-audience",
     "ExpiryMinutes": 15
@@ -63,6 +74,7 @@ In order to use the `TokenService`, you need to provide a configuration object t
 ```
 
 In `Program.cs` or your startup file, you would typically configure the services like this:
+
 ```csharp
 var builder = WebApplication.CreateBuilder(args);
 

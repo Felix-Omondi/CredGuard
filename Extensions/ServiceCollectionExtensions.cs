@@ -22,8 +22,11 @@ public static class ServiceCollectionExtensions
     /// <exception cref="InvalidOperationException">Thrown when the JWT key is not configured.</exception>
     public static IServiceCollection AddCredGuard(this IServiceCollection services, IConfiguration configuration)
     {
-        var jwtKey = configuration["JwtSettings:Key"]
-            ?? throw new InvalidOperationException("JWT key is not configured in JwtSettings:Key.");
+        var jwtKey = configuration["JwtSettings:TokenSecret"]
+            ?? throw new InvalidOperationException("JWT key is not configured in JwtSettings:TokenSecret.");
+
+        _ = configuration["JwtSettings:RefreshTokenSecret"]
+            ?? throw new InvalidOperationException("JWT key is not configured in JwtSettings:RefreshTokenSecret.");
 
         services.AddScoped<TokenService>();
 
@@ -35,7 +38,7 @@ public static class ServiceCollectionExtensions
         services.AddAuthentication(options =>
         {
             options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
         }).AddJwtBearer(options =>
         {
             // Set to false so ASP.NET Core respects your exact claim names
