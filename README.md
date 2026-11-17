@@ -55,7 +55,7 @@ In order to use the `TokenService`, you need to provide a configuration object t
     "Key": "your-secret-key",
     "Issuer": "your-issuer",
     "Audience": "your-audience",
-    "ExpiryHours": 0.5
+    "ExpiryMinutes": 15
   }
 }
 

@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.JsonWebTokens;
 using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames;
 using System.Text;
 using System.Security.Claims;
+using System.Security.Cryptography;
 
 namespace CredGuard.Services;
 
@@ -48,7 +49,7 @@ public class TokenService
         var descriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(claims),
-            Expires = DateTime.UtcNow.AddHours(Convert.ToDouble(_configuration["JwtSettings:ExpiryHours"] ?? "0.5")),
+            Expires = DateTime.UtcNow.AddMinutes(Convert.ToDouble(_configuration["JwtSettings:ExpiryMinutes"] ?? "15")),
             Issuer = _configuration["JwtSettings:Issuer"],
             Audience = _configuration["JwtSettings:Audience"],
             SigningCredentials = credentials,
@@ -59,5 +60,25 @@ public class TokenService
         var token = handler.CreateToken(descriptor);
 
         return token;
+    }
+
+    /// <summary>
+    /// Generates a cryptographically secure random refresh token.
+    /// </summary>
+    /// <returns>A Base64-encoded 64-byte random string.</returns>
+    public string GenerateRefreshToken()
+    {
+        byte[] randomBytes = RandomNumberGenerator.GetBytes(64);
+        return Convert.ToBase64String(randomBytes);
+    }
+
+    /// <summary>
+    /// Calculates the UTC expiration timestamp for a new refresh token based on configuration.
+    /// </summary>
+    /// <returns>The UTC <see cref="DateTime"/> when the refresh token expires.</returns>
+    public DateTime GetRefreshTokenExpiry()
+    {
+        var expiryDays = Convert.ToDouble(_configuration["JwtSettings:RefreshTokenExpiryDays"] ?? "7");
+        return DateTime.UtcNow.AddDays(expiryDays);
     }
 }
