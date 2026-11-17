@@ -50,7 +50,7 @@ public static class ServiceCollectionExtensions
                 ValidIssuer = configuration["JwtSettings:Issuer"],
                 ValidAudience = configuration["JwtSettings:Audience"],
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)),
-                ClockSkew = TimeSpan.Zero,
+                ClockSkew = TimeSpan.Zero, // so expired access tokens are rejected immediately instead of getting the default 5-minute grace period
                 NameClaimType = JwtRegisteredClaimNames.Name,
 
                 // Instructs the framework to look at your custom "role" claim
