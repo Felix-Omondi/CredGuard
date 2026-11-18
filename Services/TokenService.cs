@@ -67,7 +67,7 @@ public class TokenService
     /// Generates a signed JWT refresh token valid for 7 days.
     /// </summary>
     /// <returns>A signed JWT string.</returns>
-    public string GenerateRefreshToken()
+    public (string,DateTime) GenerateRefreshToken()
     {
         var refreshTokenKey = _configuration["JwtSettings:RefreshTokenSecret"] ?? throw new InvalidOperationException("JwtSettings:RefreshTokenSecret is missing from configuration.");
         byte[] keyBytes = Encoding.UTF8.GetBytes(refreshTokenKey);
@@ -89,17 +89,7 @@ public class TokenService
         var handler = new JsonWebTokenHandler();
         var token = handler.CreateToken(descriptor);
 
-        return token;
-    }
-
-    /// <summary>
-    /// Calculates the UTC expiration timestamp for a new refresh token based on configuration.
-    /// </summary>
-    /// <returns>The UTC <see cref="DateTime"/> when the refresh token expires.</returns>
-    public DateTime GetRefreshTokenExpiry()
-    {
-        var expiryDays = Convert.ToDouble(_configuration["JwtSettings:RefreshTokenExpiryDays"] ?? "7");
-        return DateTime.UtcNow.AddDays(expiryDays);
+        return (token,expirationDate);
     }
 
     /// <summary>
@@ -131,7 +121,7 @@ public class TokenService
         };
 
         var handler = new JsonWebTokenHandler();
-        var tokenValidationResult = await handler.ValidateTokenAsync(refreshTokenKey, validationParameters);
+        var tokenValidationResult = await handler.ValidateTokenAsync(refreshToken, validationParameters);
 
         return tokenValidationResult.IsValid;
     }
