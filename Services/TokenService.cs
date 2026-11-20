@@ -31,7 +31,7 @@ public class TokenService
     /// <param name="role">The role of the user.</param>
     /// <returns>The generated JWT.</returns>
     /// <exception cref="InvalidOperationException">Thrown when required JWT settings are missing from configuration.</exception>
-    public (string, DateTime) GenerateToken(string name, string email, string role)
+    public (string, DateTime) GenerateToken(int userId, string name, string email, string role)
     {
         var jwtKey = _configuration["JwtSettings:TokenSecret"] ?? throw new InvalidOperationException("JwtSettings:TokenSecret is missing from configuration.");
         byte[] keyBytes = Encoding.UTF8.GetBytes(jwtKey);
@@ -40,7 +40,7 @@ public class TokenService
 
         var claims = new List<Claim>
         {
-            new (JwtRegisteredClaimNames.Email,email),
+            new (JwtRegisteredClaimNames.Sub,userId.ToString(),JwtRegisteredClaimNames.Email,email),
                 new (JwtRegisteredClaimNames.Name,name),
                 new ("role", role)
         };
@@ -67,7 +67,7 @@ public class TokenService
     /// Generates a signed JWT refresh token valid for 7 days.
     /// </summary>
     /// <returns>A signed JWT string.</returns>
-    public (string,DateTime) GenerateRefreshToken()
+    public (string, DateTime) GenerateRefreshToken()
     {
         var refreshTokenKey = _configuration["JwtSettings:RefreshTokenSecret"] ?? throw new InvalidOperationException("JwtSettings:RefreshTokenSecret is missing from configuration.");
         byte[] keyBytes = Encoding.UTF8.GetBytes(refreshTokenKey);
@@ -89,7 +89,7 @@ public class TokenService
         var handler = new JsonWebTokenHandler();
         var token = handler.CreateToken(descriptor);
 
-        return (token,expirationDate);
+        return (token, expirationDate);
     }
 
     /// <summary>
